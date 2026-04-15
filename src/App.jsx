@@ -2,6 +2,23 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 
 const STORAGE_KEY = "vocab_spa_collections_v2";
 const QUIZ_LENGTH = 10;
+const DEFAULT_WORDS = [
+  { id: "default-january", word: "January", translation: "styczeń" },
+  { id: "default-february", word: "February", translation: "luty" },
+  { id: "default-march", word: "March", translation: "marzec" },
+  { id: "default-april", word: "April", translation: "kwiecień" },
+  { id: "default-may", word: "May", translation: "maj" },
+  { id: "default-june", word: "June", translation: "czerwiec" },
+  { id: "default-spring", word: "spring", translation: "wiosna" },
+  { id: "default-summer", word: "summer", translation: "lato" },
+  { id: "default-autumn", word: "autumn", translation: "jesień" },
+  { id: "default-winter", word: "winter", translation: "zima" },
+  { id: "default-monday", word: "Monday", translation: "poniedziałek" },
+  { id: "default-tuesday", word: "Tuesday", translation: "wtorek" },
+  { id: "default-wednesday", word: "Wednesday", translation: "środa" },
+  { id: "default-thursday", word: "Thursday", translation: "czwartek" },
+  { id: "default-friday", word: "Friday", translation: "piątek" },
+];
 
 const styles = {
   page: {
@@ -300,9 +317,10 @@ function loadQuizData(quizId) {
   const collections = loadCollections();
   const current = collections[quizId];
   if (!current) {
+    const words = quizId === "default" ? DEFAULT_WORDS : [];
     return {
       meta: { id: quizId, name: quizId === "default" ? "Domyślny quiz" : quizId },
-      words: [],
+      words,
     };
   }
 
@@ -339,7 +357,11 @@ function listQuizzes() {
   }));
 
   if (!entries.find((item) => item.id === "default")) {
-    entries.unshift({ id: "default", name: "Domyślny quiz", count: 0 });
+    entries.unshift({
+      id: "default",
+      name: "Domyślny quiz",
+      count: DEFAULT_WORDS.length,
+    });
   }
 
   return entries.sort((a, b) => a.name.localeCompare(b.name, "pl"));
